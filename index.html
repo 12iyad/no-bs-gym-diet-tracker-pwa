@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d0d10" />
+  <meta name="description" content="Minimal gym and diet tracker — works offline." />
+  <title>No-BS Gym + Diet</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+</head>
+<body>
+  <div id="app" class="app">
+    <header class="header">
+      <h1 class="title">No-BS Tracker</h1>
+      <p class="subtitle" id="today-label"></p>
+      <div class="utils">
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-export">Export</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-import">Import</button>
+        <input type="file" id="import-file" accept="application/json" hidden />
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-seed">Seed</button>
+        <button type="button" class="btn btn-ghost btn-sm btn-danger-text" id="btn-reset">Reset</button>
+      </div>
+    </header>
+
+    <section class="summary" id="summary" aria-label="Summary"></section>
+
+    <main class="main">
+      <section id="panel-workout" class="panel" data-panel="workout"></section>
+      <section id="panel-food" class="panel hidden" data-panel="food"></section>
+      <section id="panel-body" class="panel hidden" data-panel="body"></section>
+    </main>
+
+    <nav class="tabbar" role="tablist" aria-label="Main">
+      <button type="button" class="tab active" data-tab="workout" role="tab" aria-selected="true">Workout</button>
+      <button type="button" class="tab" data-tab="food" role="tab" aria-selected="false">Food</button>
+      <button type="button" class="tab" data-tab="body" role="tab" aria-selected="false">Body</button>
+    </nav>
+  </div>
+
+  <!-- Backdrop + sheets -->
+  <div id="backdrop" class="backdrop hidden" aria-hidden="true"></div>
+
+  <div id="sheet-log-set" class="sheet hidden" role="dialog" aria-modal="true" aria-label="Log set">
+    <div class="sheet-handle"></div>
+    <h2 class="sheet-title" id="sheet-log-set-title">Log set</h2>
+    <div class="sheet-body">
+      <label class="field">
+        <span class="field-label">Weight (kg)</span>
+        <input type="text" inputmode="decimal" class="field-input" id="input-weight" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span class="field-label">Reps</span>
+        <input type="text" inputmode="numeric" class="field-input" id="input-reps" autocomplete="off" />
+      </label>
+    </div>
+    <div class="sheet-actions">
+      <button type="button" class="btn btn-secondary" id="btn-log-set-cancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="btn-log-set-save">Save set</button>
+    </div>
+  </div>
+
+  <div id="sheet-exercise" class="sheet hidden" role="dialog" aria-modal="true" aria-label="Exercise detail">
+    <div class="sheet-handle"></div>
+    <h2 class="sheet-title" id="sheet-exercise-title">Exercise</h2>
+    <div class="sheet-body sheet-exercise-body">
+      <div class="exercise-stats" id="sheet-exercise-stats"></div>
+      <div class="chart-range" role="group" aria-label="Chart range">
+        <button type="button" class="chip chip-active" data-range="30">30d</button>
+        <button type="button" class="chip" data-range="90">90d</button>
+        <button type="button" class="chip" data-range="all">All</button>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="exercise-chart" width="360" height="180"></canvas>
+        <p class="chart-empty hidden" id="exercise-chart-empty">Log sets to see trend.</p>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button type="button" class="btn btn-secondary" id="btn-exercise-close">Close</button>
+      <button type="button" class="btn btn-primary" id="btn-exercise-log-set">Log set</button>
+    </div>
+  </div>
+
+  <div id="sheet-food" class="sheet hidden" role="dialog" aria-modal="true" aria-label="Log meal">
+    <div class="sheet-handle"></div>
+    <h2 class="sheet-title" id="sheet-food-title">Meal</h2>
+    <p class="kcal-hint" id="kcal-hint"></p>
+    <div class="sheet-body food-grid">
+      <label class="field">
+        <span class="field-label">Protein (g)</span>
+        <input type="text" inputmode="decimal" class="field-input" id="input-food-p" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span class="field-label">Carbs (g)</span>
+        <input type="text" inputmode="decimal" class="field-input" id="input-food-c" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span class="field-label">Fat (g)</span>
+        <input type="text" inputmode="decimal" class="field-input" id="input-food-f" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span class="field-label">Calories</span>
+        <input type="text" inputmode="decimal" class="field-input" id="input-food-kcal" autocomplete="off" />
+      </label>
+    </div>
+    <div class="sheet-actions">
+      <button type="button" class="btn btn-secondary" id="btn-food-cancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="btn-food-save">Save</button>
+    </div>
+  </div>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
